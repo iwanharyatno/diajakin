@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap w/ Vite</title>
+    <title>diajakin. - Create, organize, and join events</title>
     <link rel="stylesheet" href="/dist/diajakin.css">
     <script src="/dist/diajakin.umd.js"></script>
 </head>
