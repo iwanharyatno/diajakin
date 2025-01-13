@@ -13,4 +13,5 @@ export default {
         fileName: 'diajakin'
     }
   },
+  publicDir: 'assets'
 }

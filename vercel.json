@@ -6,12 +6,12 @@
     },
     "routes": [
         {
-            "src": "/dist/(.*)",
-            "dest": "dist/$1"
-        },
-        {
             "src": "/(.*)",
             "dest": "api/$1"
+        },
+        {
+            "src": "/dist/(.*)",
+            "dest": "dist/$1"
         }
     ]
 }
