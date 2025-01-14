@@ -4,6 +4,12 @@ require __DIR__ . "/../db/connection.php";
 require __DIR__ . "/../utils/common.php";
 
 $userId = getUserId();
+
+if ($userId == null) {
+    $path = $_SERVER['REQUEST_URI'];
+    header('Location: /login.php?redirect=' . $path, true);
+    exit;
+}
 $searchQuery = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
 
 $sql = "SELECT * FROM events WHERE events.user_id = :id ORDER BY created_at DESC";
@@ -13,7 +19,7 @@ $stmt->execute();
 
 $myEvents = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id INNER JOIN attendances ON events.id = attendances.event_id WHERE attendances.user_id = :id AND (events.title ILIKE :search OR events.description ILIKE :search)";
+$sql = "SELECT events.*, users.id as user_id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id INNER JOIN attendances ON events.id = attendances.event_id WHERE attendances.user_id = :id AND (events.title ILIKE :search OR events.description ILIKE :search)";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id', $userId);
 $stmt->bindParam(':search', $searchQuery);

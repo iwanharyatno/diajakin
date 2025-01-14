@@ -109,8 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             window.print();
         });
 
-        window.onafterprint = function () {
-            window.location.href = "/event-detail.php?id=<?= $event['id'] ?>";
+        window.onafterprint = function() {
+            window.history.back();
         }
 
         function reveal() {

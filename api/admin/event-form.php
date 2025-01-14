@@ -6,7 +6,14 @@ require __DIR__ . "/../utils/common.php";
 
 $userId = getUserId();
 
+if ($userId == null) {
+    $path = $_SERVER['REQUEST_URI'];
+    header('Location: /login.php?redirect=' . $path, true);
+    exit;
+}
+
 $event = null;
+$attendances = [];
 if (isset($_GET['id'])) {
     $eventId = $_GET['id'];
     $sql = "SELECT * FROM events WHERE id = :id";
@@ -15,6 +22,13 @@ if (isset($_GET['id'])) {
     $stmt->execute();
 
     $event = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT users.id as user_id, users.email as user_email, users.full_name as user_full_name, attendances.created_at as register_date FROM attendances INNER JOIN users ON users.id = attendances.user_id WHERE attendances.event_id = :id ORDER BY attendances.created_at DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':id', $eventId);
+    $stmt->execute();
+
+    $attendances = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -81,8 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 if (getSession('swal') != null) {
-    echo getSession('swal');
+    $message = getSession('swal');
     removeSession('swal');
+
+    echo $message;
 }
 
 ?>
@@ -154,6 +170,45 @@ if (getSession('swal') != null) {
                         <button class="btn btn-primary">Simpan</button>
                         <button type="reset" class="btn btn-secondary">Reset</button>
                     </form>
+                    <?php if ($event != null): ?>
+                        <h2 class="display-6 mb-2 mt-4">Daftar Peserta</h2>
+                        <div class="table-responsive">
+                            <table class="table table-border">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Email</th>
+                                    <th>Tanggal Daftar</th>
+                                </tr>
+
+                                <?php
+                                $i = 1;
+                                foreach ($attendances as $attendance):
+                                ?>
+                                    <tr>
+                                        <td><?= $i++ ?></td>
+                                        <td><?= $attendance['user_full_name'] ?></td>
+                                        <td><?= $attendance['user_email'] ?></td>
+                                        <td><?= dateFormatFromString($attendance['register_date']) ?></td>
+                                    </tr>
+                                <?php
+                                endforeach;
+                                ?>
+
+                                <?php if (count($attendances) <= 0): ?>
+                                    <tr>
+                                        <td colspan="4" class="text-center">Belum ada peserta</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </table>
+                        </div>
+                        <?php if (count($attendances) > 0): ?>
+                            <form action="print.php" method="post">
+                                <input type="hidden" name="id" value="<?= $event['id'] ?>">
+                                <button class="btn btn-primary">Cetak Daftar Hadir</button>
+                            </form>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </section>
                 <?php require __DIR__ . "/../components/footer.php" ?>
             </div>

@@ -5,6 +5,12 @@ require __DIR__ . "/../utils/common.php";
 
 $userId = getUserId();
 
+if ($userId == null) {
+    $path = $_SERVER['REQUEST_URI'];
+    header('Location: /login.php?redirect=' . $path, true);
+    exit;
+}
+
 $sql = "SELECT COUNT(*) as created FROM events WHERE user_id = :id LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id', $userId);

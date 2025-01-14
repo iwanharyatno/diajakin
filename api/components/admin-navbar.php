@@ -1,12 +1,4 @@
 <?php
-$userId = getUserId();
-
-if ($userId == null) {
-    $path = $_SERVER['REQUEST_URI'];
-    header('Location: /login.php?redirect=' . $path, true);
-    exit;
-}
-
 $sql = "SELECT * FROM users WHERE id = :id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id', $userId);

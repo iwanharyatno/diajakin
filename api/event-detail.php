@@ -6,7 +6,7 @@ require __DIR__ . "/utils/common.php";
 $userId = getUserId();
 $eventId = $_GET['id'];
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE events.id = :id LIMIT 1";
+$sql = "SELECT events.*, users.id as user_id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE events.id = :id LIMIT 1";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':id', $eventId);
 $stmt->execute();
@@ -107,19 +107,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         setSession('swal', $swal);
         header('Location: /event-detail.php?id=' . $eventId);
     }
+
+
+    $sql = "SELECT * FROM attendances WHERE user_id = :user_id AND event_id = :event_id";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':user_id', $userId);
+    $stmt->bindParam(':event_id', $_GET['id']);
+    $stmt->execute();
+
+    $registered = $stmt->rowCount() > 0;
 }
 
-$sql = "SELECT * FROM attendances WHERE user_id = :user_id AND event_id = :event_id";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(':user_id', $userId);
-$stmt->bindParam(':event_id', $_GET['id']);
-$stmt->execute();
-
-$registered = $stmt->rowCount() > 0;
-
 if (getSession('swal') != null) {
-    echo getSession('swal');
+    $message = getSession('swal');
     removeSession('swal');
+
+    echo $message;
 }
 ?>
 
