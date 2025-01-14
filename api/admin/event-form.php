@@ -126,7 +126,7 @@ if (getSession('swal') != null) {
                         </div>
                         <div class="form-group mb-3">
                             <label for="description" class="form-label">Deskripsi<span class="text-danger">*</span></label>
-                            <textarea name="description" id="description" class="form-control"><?= $event != null ? $event['address'] : '' ?></textarea>
+                            <textarea name="description" id="description" class="form-control"><?= $event != null ? $event['description'] : '' ?></textarea>
                         </div>
                         <div class="form-group mb-3">
                             <label for="quota" class="form-label">Kuota<span class="text-danger">*</span></label>
