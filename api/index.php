@@ -93,11 +93,7 @@ $pastEvents = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </section>
     </main>
-    <footer>
-        <div class="container-fluid text-center py-3 bg-light">
-            <p class="m-0">&copy; 2021 diajakin. All rights reserved.</p>
-        </div>
-    </footer>
+    <?php require __DIR__ . "/components/footer.php"; ?>
 </body>
 
 </html>

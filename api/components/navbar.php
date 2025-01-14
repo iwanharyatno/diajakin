@@ -22,7 +22,7 @@
                     <a href="/register.php" class="btn btn-light">Registrasi</a>
                 <?php endif; ?>
                 <?php if (getUserId() != null): ?>
-                    <a href="/list-event.php?attend" class="btn btn-link text-white">Jadwal saya</a>
+                    <a href="/admin/index.php" class="btn btn-link text-white">Dashboard</a>
                     <a href="/logout.php" class="btn btn-outline-light">Logout</a>
                 <?php endif; ?>
             </div>

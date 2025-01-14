@@ -41,10 +41,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <section class="container-md mx-auto my-5">
             <h2 class="display-6 mb-4"><?= isset($_GET['attend']) ? 'Event yang saya hadiri' : 'Semua Event' ?></h2>
             <form action="" method="get">
-                <?php if (isset($_GET['attend'])): ?>
-                    <input type="hidden" name="attend">
-                <?php endif; ?>
-                <div class="input-group mb-3 w-25">
+                <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Cari event..." name="search" value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>">
                     <button class="btn btn-primary" type="submit">Cari</button>
                     <?php if (isset($_GET['search']) && $_GET['search'] != ''): ?>
@@ -74,11 +71,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </section>
     </main>
-    <footer>
-        <div class="container-fluid text-center py-3 bg-light">
-            <p class="m-0">&copy; 2021 diajakin. All rights reserved.</p>
-        </div>
-    </footer>
+    <?php require __DIR__ . "/components/footer.php"; ?>
 </body>
 
 </html>

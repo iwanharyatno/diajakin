@@ -4,18 +4,23 @@ require __DIR__ . "/db/connection.php";
 require __DIR__ . "/utils/common.php";
 
 $userId = getUserId();
+$eventId = $_GET['id'];
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE events.start_date >= CURRENT_TIMESTAMP AND events.id = :id LIMIT 1";
+$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE events.id = :id LIMIT 1";
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(':id', $_GET['id']);
+$stmt->bindParam(':id', $eventId);
 $stmt->execute();
 
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
+if (!$event) {
+    http_response_code(404);
+    exit;
+}
 
 $sql = "SELECT * FROM attendances WHERE user_id = :user_id AND event_id = :event_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':user_id', $userId);
-$stmt->bindParam(':event_id', $_GET['id']);
+$stmt->bindParam(':event_id', $eventId);
 $stmt->execute();
 
 $registered = $stmt->rowCount() > 0;
@@ -23,7 +28,7 @@ $registered = $stmt->rowCount() > 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['register'])) {
         if ($registered) {
-            echo "<script>
+            $swal = "<script>
                 window.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'error',
@@ -32,6 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     });
                 });
                 </script>";
+            setSession('swal', $swal);
+            header('Location: /event-detail.php?id=' . $eventId);
         } else {
             $sql = "INSERT INTO attendances (user_id, event_id, created_at) VALUES (:user_id, :event_id, CURRENT_TIMESTAMP)";
             $stmt = $conn->prepare($sql);
@@ -39,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':event_id', $_POST['event_id']);
             $stmt->execute();
 
-            echo "<script>
+            $swal = "<script>
                 window.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'success',
@@ -48,6 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     });
                 });
                 </script>";
+            setSession('swal', $swal);
+            header('Location: /event-detail.php?id=' . $eventId);
         }
     }
 
@@ -58,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':event_id', $_POST['event_id']);
         $stmt->execute();
 
-        echo "<script>
+        $swal = "<script>
             window.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
                     icon: 'success',
@@ -67,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             });
             </script>";
+        setSession('swal', $swal);
+        header('Location: /event-detail.php?id=' . $eventId);
     }
 }
 
@@ -78,6 +89,10 @@ $stmt->execute();
 
 $registered = $stmt->rowCount() > 0;
 
+if (getSession('swal') != null) {
+    echo getSession('swal');
+    removeSession('swal');
+}
 ?>
 
 <!doctype html>
@@ -161,11 +176,7 @@ $registered = $stmt->rowCount() > 0;
             </div>
         </section>
     </main>
-    <footer>
-        <div class="container-fluid text-center py-3 bg-light">
-            <p class="m-0">&copy; 2021 diajakin. All rights reserved.</p>
-        </div>
-    </footer>
+    <?php require __DIR__ . "/components/footer.php"; ?>
 </body>
 
 </html>

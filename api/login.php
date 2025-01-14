@@ -17,9 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($user) {
         if (password_verify($password, $user['password'])) {
             setUserId($user['id']);
-            if (isset($_SESSION['redirect'])) {
-                header('Location: ' . $_SESSION['redirect']);
-                unset($_SESSION['redirect']);
+            if (isset($_GET['redirect'])) {
+                header('Location: ' . $_GET['redirect']);
+                unset($_GET['redirect']);
             } else {
                 header('Location: /');
             }

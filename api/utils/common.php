@@ -22,3 +22,17 @@ function logout() {
     header("Location: /");
     exit;
 }
+
+function removeSession($key) {
+    unset($_COOKIE[$key]);
+    setcookie($key, '', time() - 60, "/");
+}
+function setSession($key, $value) {
+    setcookie($key, $value, time() + 30, "/");
+}
+function getSession($key) {
+    if (isset($_COOKIE[$key])) {
+        return $_COOKIE[$key];
+    }
+    return null;
+}
