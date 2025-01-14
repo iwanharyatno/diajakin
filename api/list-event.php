@@ -53,7 +53,6 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($events as $event): ?>
                     <div class="col">
                         <div class="card">
-                            <img src="/dist/header-background.jpg" class="card-img-top" alt="Event 1" style="min-height: 200px;">
                             <div class="card-body">
                                 <h5 class="card-title mb-3 fs-4">
                                     <a href="event-detail.php?id=<?= $event['id'] ?>"><?= $event['title'] ?></a>

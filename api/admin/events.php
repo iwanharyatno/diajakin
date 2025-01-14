@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
                                     <?php foreach ($myEvents as $event): ?>
                                         <div class="col">
                                             <div class="card">
-                                                <img src="/dist/header-background.jpg" class="card-img-top" alt="Event 1" style="min-height: 200px;">
                                                 <div class="card-body">
                                                     <h5 class="card-title mb-3 fs-4">
                                                         <a href="/event-detail.php?id=<?= $event['id'] ?>"><?= $event['title'] ?></a>
@@ -125,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
                                     <?php foreach ($mySchedule as $event): ?>
                                         <div class="col">
                                             <div class="card">
-                                                <img src="/dist/header-background.jpg" class="card-img-top" alt="Event 1" style="min-height: 200px;">
                                                 <div class="card-body">
                                                     <h5 class="card-title mb-3 fs-4">
                                                         <a href="/event-detail.php?id=<?= $event['id'] ?>"><?= $event['title'] ?></a>

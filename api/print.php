@@ -5,6 +5,7 @@ require __DIR__ . "/utils/common.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userId = getUserId();
+    $path = $_POST['path'];
 
     $sql = "SELECT * FROM users WHERE id = :id";
     $stmt = $conn->prepare($sql);
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="card" style="width: 300px;">
         <div class="card-header text-center">diajakin.</div>
         <div class="card-body text-center">
-            <img onload="reveal()" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://diajakin.vercel.app/event-detail.php?id=<?= $event['id'] ?>" alt="" class="card-img-top" style="width: 150px;">
+            <img onload="reveal()" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=<?= $path ?>" alt="" class="card-img-top" style="width: 150px;">
             <h2 class="card-title fs-5 mt-4 fw-light"><?= $event['title'] ?></h2>
             <p class="card-subtitle text-secondary">Oleh: <?= $event['full_name'] ?></p>
 

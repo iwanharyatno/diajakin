@@ -155,7 +155,8 @@ if (getSession('swal') != null) {
                                 </div>
                                 <form method="POST" action="print.php" class="mb-2">
                                     <input type="hidden" name="id" value="<?= $attendance['id'] ?>">
-                                    <button type="submit" class="btn btn-success w-100" name="unregister">Print Tiket</button>
+                                    <input type="hidden" name="path" value="<?= getFullURL() ?>">
+                                    <button type="submit" class="btn btn-success w-100">Print Tiket</button>
                                 </form>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
@@ -176,7 +177,6 @@ if (getSession('swal') != null) {
                 </div>
                 <div class="col-md-8">
                     <h1 class="display-3 mb-4"><?= $event['title'] ?></h1>
-                    <img src="/dist/header-background.jpg" alt="" class="img-fluid d-block" style="min-height: 200px;">
                     <table class="table table-border my-4">
                         <tr>
                             <th>Penyelenggara</th>
