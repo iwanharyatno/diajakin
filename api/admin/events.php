@@ -65,14 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
                     <h2 class="display-6 mb-4">Event saya</h2>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="myevent" data-bs-toggle="tab" data-bs-target="#myevent-pane" type="button" role="tab" aria-controls="myevent-pane" aria-selected="true">Event Saya</button>
+                            <button class="nav-link active" id="myschedule" data-bs-toggle="tab" data-bs-target="#myschedule-pane" type="button" role="tab" aria-controls="myschedule-pane" aria-selected="true">Jadwal Saya</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="myschedule" data-bs-toggle="tab" data-bs-target="#myschedule-pane" type="button" role="tab" aria-controls="myschedule-pane" aria-selected="false">Jadwal Saya</button>
+                            <button class="nav-link" id="myevent" data-bs-toggle="tab" data-bs-target="#myevent-pane" type="button" role="tab" aria-controls="myevent-pane" aria-selected="false">Event Saya</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active p-4" id="myevent-pane" role="tabpanel" aria-labelledby="myevent" tabindex="0">
+                        <div class="tab-pane fade p-4" id="myevent-pane" role="tabpanel" aria-labelledby="myevent" tabindex="0">
                             <a href="event-form.php" class="btn btn-primary">Buat Event Baru</a>
                             <section class="py-4">
                                 <form action="" method="get">
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
                                 </div>
                             </section>
                         </div>
-                        <div class="tab-pane fade p-4" id="myschedule-pane" role="tabpanel" aria-labelledby="myschedule" tabindex="0">
+                        <div class="tab-pane fade show active p-4" id="myschedule-pane" role="tabpanel" aria-labelledby="myschedule" tabindex="0">
                             <a href="/list-event.php" class="btn btn-primary">Join event</a>
                             <section class="py-4">
                                 <form action="" method="get">

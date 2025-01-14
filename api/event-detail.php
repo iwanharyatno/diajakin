@@ -24,9 +24,24 @@ $stmt->bindParam(':event_id', $eventId);
 $stmt->execute();
 
 $registered = $stmt->rowCount() > 0;
+$attendance = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['register'])) {
+        if ($event['quota'] <= 0) {
+            $swal = "<script>
+                window.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Kuota event sudah habis!',
+                    });
+                });
+                </script>";
+            setSession('swal', $swal);
+            header('Location: /event-detail.php?id=' . $eventId);
+        }
+
         if ($registered) {
             $swal = "<script>
                 window.addEventListener('DOMContentLoaded', function() {
@@ -44,6 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':user_id', $userId);
             $stmt->bindParam(':event_id', $_POST['event_id']);
+            $stmt->execute();
+
+            $sql = "UPDATE events SET quota = quota - 1 WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(':id', $_POST['event_id']);
             $stmt->execute();
 
             $swal = "<script>
@@ -65,6 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':user_id', $userId);
         $stmt->bindParam(':event_id', $_POST['event_id']);
+        $stmt->execute();
+
+        $sql = "UPDATE events SET quota = quota + 1 WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $_POST['event_id']);
         $stmt->execute();
 
         $swal = "<script>
@@ -123,15 +148,23 @@ if (getSession('swal') != null) {
                                 <div class="alert alert-warning">
                                     <p>Anda harus login terlebih dahulu untuk mendaftar event.</p>
                                 </div>
-                                <a href="/login.php" class="btn btn-primary w-100">Login</a>
+                                <a href="/login.php?redirect=<?= $_SERVER['REQUEST_URI'] ?>" class="btn btn-primary w-100">Login</a>
                             <?php elseif ($registered): ?>
                                 <div class="alert alert-success">
                                     <span>Anda sudah terdaftar.</span>
                                 </div>
+                                <form method="POST" action="print.php" class="mb-2">
+                                    <input type="hidden" name="id" value="<?= $attendance['id'] ?>">
+                                    <button type="submit" class="btn btn-success w-100" name="unregister">Print Tiket</button>
+                                </form>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
                                     <button type="submit" class="btn btn-danger w-100" name="unregister">Batalkan</button>
                                 </form>
+                            <?php elseif ($event['quota'] <= 0): ?>
+                                <div class="alert alert-warning">
+                                    <span>Kuota event sudah habis</span>
+                                </div>
                             <?php else: ?>
                                 <form method="POST">
                                     <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
