@@ -3,13 +3,13 @@
 require __DIR__ . "/db/connection.php";
 require __DIR__ . "/utils/common.php";
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date >= CURRENT_TIMESTAMP ORDER BY start_date ASC LIMIT 3";
+$sql = "SELECT events.*, users.id as user_id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date >= CURRENT_TIMESTAMP ORDER BY start_date ASC LIMIT 3";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date < CURRENT_TIMESTAMP ORDER BY start_date ASC LIMIT 3";
+$sql = "SELECT events.*, users.id as user_id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date < CURRENT_TIMESTAMP ORDER BY start_date ASC LIMIT 3";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 

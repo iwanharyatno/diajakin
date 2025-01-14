@@ -5,12 +5,13 @@ require __DIR__ . "/utils/common.php";
 
 $searchQuery = isset($_GET['search']) ? '%' . $_GET['search'] . '%' : '%';
 
-$sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date >= CURRENT_TIMESTAMP AND (events.title ILIKE :search OR events.description ILIKE :search) ORDER BY start_date ASC";
+$sql = "SELECT events.*, users.id as user_id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id WHERE start_date >= CURRENT_TIMESTAMP AND (title ILIKE :search OR description ILIKE :search) ORDER BY start_date ASC LIMIT 3";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':search', $searchQuery);
+$stmt->execute();
 
 if (isset($_GET['attend'])) {
-    $sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id INNER JOIN attendances ON events.id = attendances.event_id WHERE attendances.user_id = :user_id AND (events.title ILIKE :search OR events.description ILIKE :search)";
+    $sql = "SELECT events.*, users.id, users.full_name FROM events INNER JOIN users ON users.id = events.user_id INNER JOIN attendances ON events.id = attendances.event_id WHERE attendances.user_id = :user_id AND start_date >= CURRENT_TIMESTAMP AND (events.title ILIKE :search OR events.description ILIKE :search)";
     $stmt = $conn->prepare($sql);
     $userId = getUserId();
     $stmt->bindParam(':user_id', $userId);

@@ -17,6 +17,9 @@ if (!$event) {
     exit;
 }
 
+date_default_timezone_set('Asia/Jakarta');
+$pastEvent = date_create($event['start_date']) < date_create('now');
+
 $sql = "SELECT * FROM attendances WHERE user_id = :user_id AND event_id = :event_id";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':user_id', $userId);
@@ -165,6 +168,10 @@ if (getSession('swal') != null) {
                             <?php elseif ($event['quota'] <= 0): ?>
                                 <div class="alert alert-warning">
                                     <span>Kuota event sudah habis</span>
+                                </div>
+                            <?php elseif ($pastEvent): ?>
+                                <div class="alert alert-warning">
+                                    <span>Event sudah berakhir</span>
                                 </div>
                             <?php else: ?>
                                 <form method="POST">
