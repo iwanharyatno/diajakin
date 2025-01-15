@@ -23,6 +23,11 @@ if (isset($_GET['id'])) {
 
     $event = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if ($event['user_id'] != $userId) {
+        http_response_code(403);
+        exit;
+    }
+
     $sql = "SELECT users.id as user_id, users.email as user_email, users.full_name as user_full_name, attendances.created_at as register_date FROM attendances INNER JOIN users ON users.id = attendances.user_id WHERE attendances.event_id = :id ORDER BY attendances.created_at DESC";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':id', $eventId);
