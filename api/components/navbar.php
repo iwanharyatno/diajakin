@@ -11,9 +11,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/list-event.php">Event</a>
-                </li>   
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Tentang</a>
                 </li>
             </ul>
             <div class="d-flex justify-content-center align-items-center gap-2">
